@@ -222,43 +222,11 @@
 
 /* Input Area */
 .chatbot-input-area {
-    display: block;
+    display: flex;
+    gap: 8px;
     padding: 12px;
     background: white;
     border-top: 1px solid #e0e0e0;
-}
-
-.chatbot-booking-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-}
-
-.chatbot-booking-grid .chatbot-input,
-.chatbot-booking-grid .chatbot-select,
-.chatbot-book-btn {
-    width: 100%;
-}
-
-.chatbot-booking-grid #chatbot-service,
-.chatbot-booking-grid #chatbot-date,
-.chatbot-book-btn {
-    grid-column: span 2;
-}
-
-.chatbot-book-btn {
-    background: linear-gradient(135deg, var(--secondary-color) 0%, #ff8c5a 100%);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.chatbot-book-btn:hover {
-    filter: brightness(1.05);
 }
 
 .chatbot-input {
@@ -380,14 +348,14 @@
     .chatbot-container {
         width: min(var(--chatbot-dyn-width), calc(100vw - 20px));
         max-height: min(var(--chatbot-dyn-height), calc(100dvh - 220px));
-        max-height: min(var(--chatbot-dyn-height), calc(100dvh - 240px));
+    }
 
     .chatbot-container.open {
         height: min(var(--chatbot-dyn-height), calc(100dvh - 220px));
     }
 
     .message-content {
-        height: min(var(--chatbot-dyn-height), calc(100dvh - 240px));
+        max-width: 90%;
         font-size: 13px;
     }
 
@@ -408,18 +376,19 @@
 @media (max-width: 480px) {
     #chatbot-toggle {
         width: 50px;
-        max-height: min(var(--chatbot-dyn-height), calc(100dvh - 250px));
+        height: 50px;
         bottom: calc(138px + env(safe-area-inset-bottom));
         right: 10px;
     }
-        height: min(var(--chatbot-dyn-height), calc(100dvh - 250px));
+
     #chatbot-toggle svg {
         width: 24px;
         height: 24px;
     }
 
     .chatbot-input-area {
-        padding: 8px;
+        padding: 10px;
+        gap: 6px;
     }
 
     .chatbot-send {
@@ -429,26 +398,8 @@
     }
 
     .message-content {
-        font-size: 11px;
-        padding: 8px 10px;
-    }
-
-    .chatbot-booking-grid {
-        grid-template-columns: 1fr;
-        gap: 6px;
-    }
-
-    .chatbot-booking-grid #chatbot-service,
-    .chatbot-booking-grid #chatbot-date,
-    .chatbot-book-btn {
-        grid-column: span 1;
-    }
-
-    .chatbot-input,
-    .chatbot-select,
-    .chatbot-book-btn {
         font-size: 12px;
-        padding: 8px 10px;
+        padding: 10px 12px;
     }
 }
 
