@@ -8,6 +8,11 @@ class MyraaChatbot {
         this.conversationHistory = [];
         this.isOpen = false;
         this.messageCount = 0;
+        this.appointmentFlow = {
+            active: false,
+            step: null,
+            data: {}
+        };
         this.apiKey = this.getApiKey(); // Get from environment or config
         this.baseUrl = 'https://api.openai.com/v1/chat/completions';
         
@@ -73,10 +78,12 @@ class MyraaChatbot {
             },
             serviceAreas: {
                 primary: ['Hyderabad'],
-                secondary: ['Bangalore', 'Vijayawada', 'Visakhapatnam', 'Chennai', 'Pune', 'Mumbai']
+                secondary: ['Bangalore', 'Visakhapatnam']
             },
             support: {
+                contactName: 'Myraa Safety Nets & Invisible Grills Support Desk',
                 phone: '+91 9493948842',
+                whatsapp: '+91 9493948842',
                 email: 'myraa@myraasafetynets.com',
                 hours: '24/7 Available',
                 freeInspection: 'Yes - Schedule a free site inspection',
@@ -125,6 +132,7 @@ class MyraaChatbot {
                             <p style="font-size: 0.85em; margin-top: 8px; opacity: 0.8;">Ask me about:</p>
                             <div class="quick-replies">
                                 <button class="quick-reply" data-query="What services do you provide?">All Services</button>
+                                <button class="quick-reply" data-query="Tell me about invisible grills">Invisible Grills</button>
                                 <button class="quick-reply" data-query="Tell me about pigeon and bird safety nets">Bird Nets</button>
                                 <button class="quick-reply" data-query="Tell me about sports safety nets">Sports Nets</button>
                                 <button class="quick-reply" data-query="What is the pricing for all services?">Pricing</button>
@@ -292,6 +300,10 @@ Service areas: ${JSON.stringify(this.serviceDatabase.serviceAreas)}`;
     getLocalResponse(userMessage) {
         const lowerMessage = userMessage.toLowerCase().trim();
 
+        if (this.appointmentFlow.active) {
+            return this.handleAppointmentFlow(userMessage);
+        }
+
         const hasAny = (keywords) => keywords.some((keyword) => lowerMessage.includes(keyword));
 
         const greetingKeywords = ['hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening'];
@@ -300,7 +312,7 @@ Service areas: ${JSON.stringify(this.serviceDatabase.serviceAreas)}`;
         const pricingKeywords = ['price', 'pricing', 'cost', 'quote', 'how much'];
         const installationKeywords = ['installation', 'install', 'time', 'duration', 'how long', 'process'];
         const warrantyKeywords = ['warranty', 'guarantee', 'guarantees'];
-        const bookingKeywords = ['book', 'inspection', 'visit', 'site visit', 'schedule'];
+        const bookingKeywords = ['book', 'appointment', 'inspection', 'visit', 'site visit', 'schedule'];
         const contactKeywords = ['contact', 'call', 'phone', 'email', 'whatsapp', 'support'];
 
         if (hasAny(greetingKeywords)) {
@@ -352,14 +364,73 @@ Service areas: ${JSON.stringify(this.serviceDatabase.serviceAreas)}`;
         }
 
         if (hasAny(areaIntentKeywords)) {
-            return `📍 **Our Service Areas:**\n\n**Primary:** Hyderabad\n**Secondary:** Bangalore, Vijayawada, Visakhapatnam, Chennai, Pune, Mumbai\n\nWe provide professional installation across all these cities.\n📞 Check your area now: +91 9493948842`;
+            return `📍 **Our Service Areas:**\n\n**Primary:** Hyderabad\n**Secondary:** Bangalore, Visakhapatnam\n\nWe provide professional installation across these cities.\n📞 Check your area now: +91 9493948842`;
         }
 
-        if (hasAny(bookingKeywords) || hasAny(contactKeywords)) {
-            return `📞 **Contact & Booking:**\n\n• Call: +91 9493948842\n• Email: myraa@myraasafetynets.com\n• WhatsApp: https://wa.me/919493948842\n• Support: 24/7\n\n✅ Free site inspection available. Reply with your city to schedule quickly.`;
+        if (hasAny(bookingKeywords)) {
+            this.appointmentFlow = {
+                active: true,
+                step: 'name',
+                data: {}
+            };
+            return `📅 Great, let's book your appointment.\n\nPlease share your **full name**.`;
+        }
+
+        if (hasAny(contactKeywords)) {
+            return `📞 **Myraa Safety Nets & Invisible Grills - Contact Details**\n\n• Contact Name: ${this.serviceDatabase.support.contactName}\n• Mobile: ${this.serviceDatabase.support.phone}\n• WhatsApp: ${this.serviceDatabase.support.whatsapp}\n• Email: ${this.serviceDatabase.support.email}\n• Locations: Hyderabad, Bangalore, Visakhapatnam\n• Support Hours: ${this.serviceDatabase.support.hours}\n\n✅ Want to book now? Type: **Book appointment**`;
         }
 
         return `I can help with **all Myraa services**: balcony nets, bird nets, children safety nets, invisible grills, sports nets, duct covering nets, and construction safety nets.\n\nAsk me like:\n• "Show all services"\n• "Sports nets details"\n• "Bird nets price"\n• "Book free inspection"\n\n📞 +91 9493948842`;
+    }
+
+    handleAppointmentFlow(userMessage) {
+        const message = userMessage.trim();
+        const step = this.appointmentFlow.step;
+
+        if (step === 'name') {
+            this.appointmentFlow.data.name = message;
+            this.appointmentFlow.step = 'mobile';
+            return `Thanks ${message}! Please share your **mobile number** (10 digits).`;
+        }
+
+        if (step === 'mobile') {
+            const digits = message.replace(/\D/g, '');
+            if (digits.length < 10) {
+                return `Please enter a valid **10-digit mobile number** so I can confirm your appointment.`;
+            }
+            this.appointmentFlow.data.mobile = digits.slice(-10);
+            this.appointmentFlow.step = 'city';
+            return `Perfect. Which city do you need service in?\n\nOptions: Hyderabad, Bangalore, Visakhapatnam`;
+        }
+
+        if (step === 'city') {
+            this.appointmentFlow.data.city = message;
+            this.appointmentFlow.step = 'service';
+            return `Got it. Which service do you need?\n\nExamples: Invisible Grills, Bird Nets, Balcony Nets, Sports Nets`;
+        }
+
+        if (step === 'service') {
+            this.appointmentFlow.data.service = message;
+            this.appointmentFlow.step = 'time';
+            return `Great choice. Please share your preferred **date/time** for site inspection.`;
+        }
+
+        if (step === 'time') {
+            this.appointmentFlow.data.time = message;
+
+            const data = this.appointmentFlow.data;
+            const summary = `📋 **Appointment Request Created**\n\n• Name: ${data.name}\n• Mobile: +91 ${data.mobile}\n• City: ${data.city}\n• Service: ${data.service}\n• Preferred Time: ${data.time}\n\nOur support team will contact you soon.`;
+
+            const waMessage = encodeURIComponent(`Appointment Request\nName: ${data.name}\nMobile: +91 ${data.mobile}\nCity: ${data.city}\nService: ${data.service}\nPreferred Time: ${data.time}`);
+            const waUrl = `https://wa.me/919493948842?text=${waMessage}`;
+
+            this.appointmentFlow = { active: false, step: null, data: {} };
+
+            return `${summary}\n\n✅ Confirm on WhatsApp: ${waUrl}`;
+        }
+
+        this.appointmentFlow = { active: false, step: null, data: {} };
+        return `Let's start again. Type **Book appointment** to continue.`;
     }
 }
 
