@@ -497,7 +497,7 @@
       const goToHeroSlide = (index) => {
         const safeIndex = index >= heroSlides.length ? 0 : index;
         heroDynamicTrack.scrollTo({
-          left: heroSlides[safeIndex].offsetLeft - 14,
+          left: heroSlides[safeIndex].offsetLeft,
           behavior: 'smooth'
         });
         heroDynamicDots.forEach((dot, dotIndex) => {
@@ -514,6 +514,22 @@
         goToHeroSlide(heroSlideIndex + 1);
       }, 10000);
     }
+  }
+
+  const backToTop = $('#backToTop');
+  if (backToTop) {
+    const toggleBackToTop = () => {
+      if (window.scrollY > 400) {
+        backToTop.classList.add('show');
+      } else {
+        backToTop.classList.remove('show');
+      }
+    };
+    toggleBackToTop();
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }
 
   const quickForm = $('#quickForm');
