@@ -8,6 +8,7 @@ class MyraaChatbot {
         this.conversationHistory = [];
         this.isOpen = false;
         this.messageCount = 0;
+        this.sentLeadNumbers = new Set();
         this.appointmentFlow = {
             active: false,
             step: null,
@@ -112,6 +113,53 @@ class MyraaChatbot {
         return window.MYRAA_CHATBOT_API_KEY || null;
     }
 
+    getBusinessConfig() {
+        return window.BUSINESS_CONFIG || null;
+    }
+
+    extractMobileNumber(text) {
+        const digits = (text || '').replace(/\D/g, '');
+        if (digits.length < 10) return null;
+        return digits.slice(-10);
+    }
+
+    sendLeadNotification(payload) {
+        const cfg = this.getBusinessConfig();
+        const targetEmail = (cfg && cfg.email) ? cfg.email : 'myraa@myraasafetynets.com';
+        const endpoint = `https://formsubmit.co/ajax/${targetEmail}`;
+
+        const body = new URLSearchParams();
+        body.append('_subject', 'Chatbot Booking Lead - Myraa Safety Nets');
+        body.append('_captcha', 'false');
+        body.append('_template', 'table');
+        body.append('Source', 'Website Chatbot');
+        body.append('Name', payload.name || '-');
+        body.append('Mobile', payload.mobile ? `+91 ${payload.mobile}` : '-');
+        body.append('City', payload.city || '-');
+        body.append('Service', payload.service || '-');
+        body.append('Preferred Time', payload.time || '-');
+        body.append('Message', payload.message || 'Lead captured in chatbot');
+        body.append('Page', window.location.href);
+
+        fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                Accept: 'application/json'
+            },
+            body: body.toString()
+        }).catch(() => null);
+    }
+
+    notifyWhatsApp(payload) {
+        const message = encodeURIComponent(
+            `Chatbot Lead\nName: ${payload.name || '-'}\nMobile: ${payload.mobile ? `+91 ${payload.mobile}` : '-'}\nCity: ${payload.city || '-'}\nService: ${payload.service || '-'}\nPreferred Time: ${payload.time || '-'}\nSource: Website Chatbot`
+        );
+        const waUrl = `https://wa.me/919493948842?text=${message}`;
+        window.open(waUrl, '_blank', 'noopener');
+        return waUrl;
+    }
+
     createChatbotWidget() {
         const chatbotHTML = `
             <div id="myraa-chatbot" class="chatbot-container">
@@ -135,7 +183,7 @@ class MyraaChatbot {
                                 <button class="quick-reply" data-query="Tell me about invisible grills">Invisible Grills</button>
                                 <button class="quick-reply" data-query="Tell me about pigeon and bird safety nets">Bird Nets</button>
                                 <button class="quick-reply" data-query="Tell me about sports safety nets">Sports Nets</button>
-                                <button class="quick-reply" data-query="What is the pricing for all services?">Pricing</button>
+                                <button class="quick-reply" data-query="How can I get quote for services?">Get Quote</button>
                                 <button class="quick-reply" data-query="Book a free inspection">Book Inspection</button>
                             </div>
                         </div>
@@ -259,6 +307,7 @@ class MyraaChatbot {
             const systemPrompt = `You are the digital support assistant for Myraa Safety Nets & Invisible Grills.
 Always greet users naturally when they say hi/hello.
 If the user asks about services, list ALL services first (balcony nets, pigeon/bird nets, children safety nets, invisible grills, sports safety nets, duct area covering nets, construction safety nets) before asking a follow-up.
+Never provide pricing details in chat. If asked about pricing, request user to contact phone/WhatsApp/email for quote.
 Only provide service area/city details when the user explicitly asks about location/area/city coverage.
 Use a friendly, interactive sales-support tone and end with a practical next step.
 Always include phone +91 9493948842 for bookings.
@@ -315,44 +364,60 @@ Service areas: ${JSON.stringify(this.serviceDatabase.serviceAreas)}`;
         const bookingKeywords = ['book', 'appointment', 'inspection', 'visit', 'site visit', 'schedule'];
         const contactKeywords = ['contact', 'call', 'phone', 'email', 'whatsapp', 'support'];
 
+        const extractedMobile = this.extractMobileNumber(userMessage);
+        if (extractedMobile && !this.sentLeadNumbers.has(extractedMobile)) {
+            this.sentLeadNumbers.add(extractedMobile);
+            this.sendLeadNotification({
+                name: 'Chat User',
+                mobile: extractedMobile,
+                message: userMessage
+            });
+            const waUrl = this.notifyWhatsApp({
+                name: 'Chat User',
+                mobile: extractedMobile,
+                message: userMessage
+            });
+            return `✅ Thanks! We received your mobile number **+91 ${extractedMobile}**.\n\nOur team has been notified by email and WhatsApp and will contact you soon to confirm booking.\n\n📞 +91 9493948842\n📧 myraa@myraasafetynets.com\n📲 ${waUrl}`;
+        }
+
         if (hasAny(greetingKeywords)) {
-            return `👋 Hi! Welcome to **Myraa Safety Nets & Invisible Grills**.\n\nI can help you with services, pricing, installation time, and booking.\n\nYou can start with:\n• "Show all services"\n• "Bird nets details"\n• "Sports nets price"\n\n📞 +91 9493948842`;
+            return `👋 Hi! Welcome to **Myraa Safety Nets & Invisible Grills**.\n\nI can help you with services, installation, booking, and contact details.\n\nYou can start with:\n• "Show all services"\n• "Bird nets details"\n• "Book appointment"\n\n📞 +91 9493948842`;
         }
 
         if (hasAny(serviceIntentKeywords)) {
-            return `🛠️ **Our Services:**\n\n• Balcony Safety Nets\n• Pigeon & Bird Safety Nets\n• Children Safety Nets\n• Invisible Grills\n• Sports Safety Nets\n• Duct Area & Utility Covering Nets\n• Construction Safety Nets\n\nTell me which one you want, and I will share features, pricing, and installation details instantly.\n\n📞 For quick booking: +91 9493948842`;
+            return `🛠️ **Our Services:**\n\n• Balcony Safety Nets\n• Pigeon & Bird Safety Nets\n• Children Safety Nets\n• Invisible Grills\n• Sports Safety Nets\n• Duct Area & Utility Covering Nets\n• Construction Safety Nets\n\nTell me which one you want, and I will share features and installation details instantly.\n\n📞 For quick booking: +91 9493948842`;
         }
 
         if (hasAny(['balcony'])) {
-            return `🏠 **Balcony Safety Nets**\n\n• Price: ₹3,000 - ₹15,000\n• Installation: 24-48 hours\n• Warranty: 2 years\n• Strong UV-resistant and weatherproof material\n\nWould you like an estimated cost for your balcony size?\n📞 +91 9493948842`;
+            return `🏠 **Balcony Safety Nets**\n\n• Installation: 24-48 hours\n• Warranty: 2 years\n• Strong UV-resistant and weatherproof material\n\nFor quote, contact us:\n📞 +91 9493948842\n📧 myraa@myraasafetynets.com`;
         }
 
         if (hasAny(['pigeon', 'bird', 'birds'])) {
-            return `🕊️ **Pigeon & Bird Safety Nets**\n\n• Price: ₹2,500 - ₹10,000\n• Installation: 24-48 hours\n• Warranty: 2 years\n• Humane bird control with hygienic protection\n\nWould you like me to explain mesh types for balcony vs duct area?\n📞 +91 9493948842`;
+            return `🕊️ **Pigeon & Bird Safety Nets**\n\n• Installation: 24-48 hours\n• Warranty: 2 years\n• Humane bird control with hygienic protection\n\nFor quote, contact us:\n📞 +91 9493948842\n📧 myraa@myraasafetynets.com`;
         }
 
         if (hasAny(['child', 'children', 'kids', 'kid', 'baby'])) {
-            return `👶 **Children Safety Nets**\n\n• Price: ₹4,000 - ₹12,000\n• Installation: 24-48 hours\n• Warranty: 3 years\n• High-tensile, soft, child-safe mesh\n\nShare your floor type (apartment/villa) and I can suggest the best safety setup.\n📞 +91 9493948842`;
+            return `👶 **Children Safety Nets**\n\n• Installation: 24-48 hours\n• Warranty: 3 years\n• High-tensile, soft, child-safe mesh\n\nFor quote, contact us:\n📞 +91 9493948842\n📧 myraa@myraasafetynets.com`;
         }
 
         if (hasAny(['invisible grill', 'invisible grills', 'grill', 'grills'])) {
-            return `🔒 **Invisible Grills**\n\n• Price: ₹5,000 - ₹18,000\n• Installation: 2-3 days\n• Warranty: 3 years\n• Premium modern look with strong safety cables\n\nWould you like 2 mm or 2.5 mm cable guidance based on your use-case?\n📞 +91 9493948842`;
+            return `🔒 **Invisible Grills**\n\n• Installation: 2-3 days\n• Warranty: 3 years\n• Premium modern look with strong safety cables\n\nFor quote, contact us:\n📞 +91 9493948842\n📧 myraa@myraasafetynets.com`;
         }
 
         if (hasAny(['sports', 'cricket', 'football', 'badminton', 'court net'])) {
-            return `🏅 **Sports Safety Nets**\n\n• Suitable for cricket, football, badminton, multi-sport courts\n• Price: ₹8,000 - ₹50,000 (depends on area and height)\n• Installation: 2-4 days\n• Warranty: 2 years\n\nTell me your ground/court dimensions and I will suggest a practical setup.\n📞 +91 9493948842`;
+            return `🏅 **Sports Safety Nets**\n\n• Suitable for cricket, football, badminton, multi-sport courts\n• Installation: 2-4 days\n• Warranty: 2 years\n\nFor quote, contact us:\n📞 +91 9493948842\n📧 myraa@myraasafetynets.com`;
         }
 
         if (hasAny(['duct', 'utility', 'shaft', 'covering net'])) {
-            return `🏢 **Duct Area & Utility Covering Nets**\n\n• Price: ₹3,500 - ₹14,000\n• Installation: 24-48 hours\n• Warranty: 2 years\n• Neat finishing with strong rust-resistant fittings\n\nIf you share your duct size, I can give an estimated range.\n📞 +91 9493948842`;
+            return `🏢 **Duct Area & Utility Covering Nets**\n\n• Installation: 24-48 hours\n• Warranty: 2 years\n• Neat finishing with strong rust-resistant fittings\n\nFor quote, contact us:\n📞 +91 9493948842\n📧 myraa@myraasafetynets.com`;
         }
 
         if (hasAny(['construction', 'site safety', 'industrial'])) {
-            return `🏗️ **Construction Safety Nets**\n\n• Industrial-grade project safety net solutions\n• Pricing: Custom quote\n• Installation: As per project scope\n• Includes perimeter and fall-protection support\n\nShare project type and site size for a custom plan.\n📞 +91 9493948842`;
+            return `🏗️ **Construction Safety Nets**\n\n• Industrial-grade project safety net solutions\n• Installation: As per project scope\n• Includes perimeter and fall-protection support\n\nShare project type and site size for a custom plan.\nFor quote, contact us:\n📞 +91 9493948842\n📧 myraa@myraasafetynets.com`;
         }
 
         if (hasAny(pricingKeywords)) {
-            return `💰 **Quick Pricing Guide:**\n\n• Balcony Nets: ₹3,000 - ₹15,000\n• Bird Nets: ₹2,500 - ₹10,000\n• Children Nets: ₹4,000 - ₹12,000\n• Invisible Grills: ₹5,000 - ₹18,000\n• Sports Nets: ₹8,000 - ₹50,000\n• Duct Covering Nets: ₹3,500 - ₹14,000\n\nFor exact pricing, share dimensions for a fast quote.\n📞 +91 9493948842`;
+            return `💬 We share quote details only through direct support after site details.\n\nPlease contact:\n📞 +91 9493948842\n📧 myraa@myraasafetynets.com\n📲 WhatsApp: +91 9493948842`;
         }
 
         if (hasAny(installationKeywords)) {
@@ -380,7 +445,7 @@ Service areas: ${JSON.stringify(this.serviceDatabase.serviceAreas)}`;
             return `📞 **Myraa Safety Nets & Invisible Grills - Contact Details**\n\n• Contact Name: ${this.serviceDatabase.support.contactName}\n• Mobile: ${this.serviceDatabase.support.phone}\n• WhatsApp: ${this.serviceDatabase.support.whatsapp}\n• Email: ${this.serviceDatabase.support.email}\n• Locations: Hyderabad, Bangalore, Visakhapatnam\n• Support Hours: ${this.serviceDatabase.support.hours}\n\n✅ Want to book now? Type: **Book appointment**`;
         }
 
-        return `I can help with **all Myraa services**: balcony nets, bird nets, children safety nets, invisible grills, sports nets, duct covering nets, and construction safety nets.\n\nAsk me like:\n• "Show all services"\n• "Sports nets details"\n• "Bird nets price"\n• "Book free inspection"\n\n📞 +91 9493948842`;
+        return `I can help with **all Myraa services**: balcony nets, bird nets, children safety nets, invisible grills, sports nets, duct covering nets, and construction safety nets.\n\nAsk me like:\n• "Show all services"\n• "Sports nets details"\n• "Bird nets details"\n• "Book free inspection"\n\n📞 +91 9493948842`;
     }
 
     handleAppointmentFlow(userMessage) {
@@ -399,6 +464,19 @@ Service areas: ${JSON.stringify(this.serviceDatabase.serviceAreas)}`;
                 return `Please enter a valid **10-digit mobile number** so I can confirm your appointment.`;
             }
             this.appointmentFlow.data.mobile = digits.slice(-10);
+            if (!this.sentLeadNumbers.has(this.appointmentFlow.data.mobile)) {
+                this.sentLeadNumbers.add(this.appointmentFlow.data.mobile);
+                this.sendLeadNotification({
+                    name: this.appointmentFlow.data.name || 'Chat User',
+                    mobile: this.appointmentFlow.data.mobile,
+                    message: 'Appointment flow mobile captured'
+                });
+                this.notifyWhatsApp({
+                    name: this.appointmentFlow.data.name || 'Chat User',
+                    mobile: this.appointmentFlow.data.mobile,
+                    message: 'Appointment flow mobile captured'
+                });
+            }
             this.appointmentFlow.step = 'city';
             return `Perfect. Which city do you need service in?\n\nOptions: Hyderabad, Bangalore, Visakhapatnam`;
         }
@@ -423,6 +501,15 @@ Service areas: ${JSON.stringify(this.serviceDatabase.serviceAreas)}`;
 
             const waMessage = encodeURIComponent(`Appointment Request\nName: ${data.name}\nMobile: +91 ${data.mobile}\nCity: ${data.city}\nService: ${data.service}\nPreferred Time: ${data.time}`);
             const waUrl = `https://wa.me/919493948842?text=${waMessage}`;
+
+            this.sendLeadNotification({
+                name: data.name,
+                mobile: data.mobile,
+                city: data.city,
+                service: data.service,
+                time: data.time,
+                message: 'Appointment flow completed'
+            });
 
             this.appointmentFlow = { active: false, step: null, data: {} };
 

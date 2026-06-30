@@ -324,7 +324,7 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 .services { border-bottom: 1px solid #e0e0e0; padding: 80px 0; }
 .service-tools { margin: 30px 0; display: grid; gap: 16px; }
 .chips { display: flex; gap: 10px; flex-wrap: wrap; }
-.chip { border: 1.5px solid var(--border); background: #fff; color: var(--text); border-radius: 20px; padding: 9px 16px; cursor: pointer; font-weight: 700; font-size: 14px; transition: all 0.2s; }
+.chip { border: 1.5px solid #9cb1c9; background: #eef4fb; color: #17324f; border-radius: 20px; padding: 9px 16px; cursor: pointer; font-weight: 700; font-size: 14px; transition: all 0.2s; opacity: 1; }
 .chip.active, .chip:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 #serviceSearch { margin-top: 10px; }
 .service-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); padding: 20px 0; }
@@ -638,9 +638,9 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     color: #e4eeff;
 }
 [data-theme="dark"] .chip {
-    background: #172b43;
-    border-color: #3b5574;
-    color: #edf4ff;
+    background: #203752;
+    border-color: #5c7898;
+    color: #ffffff;
 }
 [data-theme="dark"] .chip.active,
 [data-theme="dark"] .chip:hover {
