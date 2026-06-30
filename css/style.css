@@ -878,25 +878,27 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 .float-call:hover { background: #dc2626; transform: scale(1.1); }
 
 .float-wa, .float-call {
-    right: 14px;
+    right: 16px;
     border-radius: 999px;
     border: 3px solid #fff;
-    width: 62px;
-    height: 62px;
+    width: 70px;
+    height: 70px;
     box-shadow: 0 10px 24px rgba(4, 14, 31, 0.3);
 }
 .float-call {
-    top: 44%;
-    bottom: auto;
+    top: auto;
+    bottom: 184px;
     background: #ff1313;
     animation: myraaCallPulse 1.8s ease-out infinite;
 }
 .float-wa {
-    top: 55%;
-    bottom: auto;
+    top: auto;
+    bottom: 102px;
     background: #43ca5c;
     animation: myraaWaPulse 1.8s ease-out infinite;
 }
+.float-call svg { width: 30px; height: 30px; }
+.float-wa svg { width: 36px; height: 36px; fill: #fff; stroke: none; }
 .float-call:hover, .float-wa:hover { animation-play-state: paused; }
 
 @keyframes myraaCallPulse {
@@ -912,8 +914,8 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 
 .back-to-top {
     position: fixed;
-    right: 14px;
-    bottom: 22px;
+    right: 16px;
+    bottom: 268px;
     width: 50px;
     height: 50px;
     border-radius: 999px;
@@ -1313,7 +1315,10 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     .media-refresh { width: 100%; justify-content: center; }
     .footer { padding: 40px 20px 12px; }
     .foot-grid { grid-template-columns: 1fr; gap: 25px; }
-    .float-wa, .float-call { width: 50px; height: 50px; font-size: 22px; }
+    .float-wa, .float-call { width: 60px; height: 60px; font-size: 22px; }
+    .float-call { bottom: 166px; }
+    .float-wa { bottom: 94px; }
+    .back-to-top { bottom: 238px; }
     .usp-grid,
     .process-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -1377,7 +1382,10 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     .footer { padding: 35px 16px 10px; }
     .footer h4 { font-size: 14px; }
     .footer li a { font-size: 13px; }
-    .float-wa, .float-call { width: 54px; height: 54px; font-size: 20px; right: 10px; }
+    .float-wa, .float-call { width: 56px; height: 56px; font-size: 20px; right: 12px; }
+    .float-call { bottom: 158px; }
+    .float-wa { bottom: 92px; }
+    .back-to-top { right: 12px; bottom: 224px; }
     .menu-grid { display: none; }
 }
 
