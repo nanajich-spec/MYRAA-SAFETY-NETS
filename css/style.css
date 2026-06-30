@@ -341,17 +341,19 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     overflow: hidden;
     border: 1px solid rgba(220, 231, 244, 0.72);
     box-shadow: 0 18px 34px rgba(8, 20, 40, 0.24);
-    background: rgba(8, 20, 40, 0.38);
+    background: #0a1f2e;
 }
 .hero-dynamic-track {
     display: flex;
     gap: 14px;
     height: 100%;
+    width: 100%;
     overflow-x: auto;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
     padding: 14px;
     scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
 }
 .hero-dynamic-track::-webkit-scrollbar {
     display: none;
@@ -359,12 +361,22 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 .hero-slide {
     position: relative;
     flex: 0 0 260px;
-    max-width: 260px;
+    min-width: 260px;
     height: 390px;
     border-radius: 14px;
     overflow: hidden;
     scroll-snap-align: start;
     border: 1px solid rgba(230, 238, 248, 0.48);
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+.hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.5s ease;
+    display: block;
 }
 .hero-dynamic-gallery img {
     width: 100%;
@@ -503,18 +515,33 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     border: 1px solid #dbe7f2;
     background: #ffffff;
     border-radius: 14px;
-    padding: 18px;
+    padding: 0;
+    overflow: hidden;
     box-shadow: 0 10px 24px rgba(14, 36, 64, 0.07);
+    transition: all 0.3s ease;
+}
+.process-grid article:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(14, 36, 64, 0.14);
+}
+.process-grid img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-bottom: 1px solid #dbe7f2;
 }
 .process-grid h3 {
     font-size: 18px;
     color: var(--secondary);
     margin-bottom: 8px;
+    padding: 14px 14px 0;
+    font-weight: 700;
 }
 .process-grid p {
     font-size: 14px;
     color: #4c6078;
     line-height: 1.6;
+    padding: 0 14px 14px;
 }
 
 .services { border-bottom: 1px solid #e0e0e0; padding: 80px 0; }
@@ -527,12 +554,13 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 .svc { background: #fff; border: 1.5px solid #dbe6f0; border-radius: 12px; padding: 18px; transition: all 0.3s; box-shadow: 0 8px 20px rgba(16, 35, 65, 0.04); }
 .svc:hover { border-color: var(--primary); box-shadow: 0 12px 28px rgba(255, 107, 53, 0.16); transform: translateY(-3px); }
 .svc img {
-    width: 100%;
-    height: 130px;
-    border-radius: 10px;
+    width: calc(100% + 36px);
+    height: 140px;
+    margin: -18px -18px 12px -18px;
+    border-radius: 12px 12px 0 0;
     object-fit: cover;
-    border: 1px solid #d7e3ef;
-    margin-bottom: 12px;
+    border: none;
+    display: block;
 }
 .svc h3 { font-size: 17px; color: var(--secondary); margin-bottom: 10px; font-weight: 700; }
 .svc p { color: #666; font-size: 14px; }
