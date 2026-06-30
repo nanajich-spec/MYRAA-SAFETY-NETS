@@ -482,37 +482,63 @@
     setInterval(() => show((idx + 1) % reviews.length), 4500);
   }
 
-  const heroDynamicGallery = $('#heroDynamicGallery');
-  const heroDynamicTrack = $('#heroDynamicTrack');
-  const heroDynamicDotsWrap = $('#heroDynamicDots');
-  if (heroDynamicGallery && heroDynamicTrack && heroDynamicDotsWrap) {
-    const heroSlides = $$('.hero-slide', heroDynamicTrack);
-    if (heroSlides.length) {
-      let heroSlideIndex = 0;
-      heroDynamicDotsWrap.innerHTML = heroSlides
+  const heroBannerTrack = $('#heroBannerTrack');
+  const heroBannerDotsWrap = $('#heroBannerDots');
+  if (heroBannerTrack && heroBannerDotsWrap) {
+    const bannerSlides = $$('.hero-banner-slide', heroBannerTrack);
+    if (bannerSlides.length) {
+      let bannerIndex = 0;
+      let bannerTimer = null;
+      heroBannerDotsWrap.innerHTML = bannerSlides
         .map((_, i) => `<span class="${i === 0 ? 'active' : ''}"></span>`)
         .join('');
-      const heroDynamicDots = $$('#heroDynamicDots span');
+      const bannerDots = $$('#heroBannerDots span');
 
-      const goToHeroSlide = (index) => {
-        const safeIndex = index >= heroSlides.length ? 0 : index;
-        heroDynamicTrack.scrollTo({
-          left: heroSlides[safeIndex].offsetLeft,
+      const goToBanner = (index) => {
+        const safeIndex = (index + bannerSlides.length) % bannerSlides.length;
+        heroBannerTrack.scrollTo({
+          left: bannerSlides[safeIndex].offsetLeft,
           behavior: 'smooth'
         });
-        heroDynamicDots.forEach((dot, dotIndex) => {
+        bannerDots.forEach((dot, dotIndex) => {
           dot.classList.toggle('active', dotIndex === safeIndex);
         });
-        heroSlideIndex = safeIndex;
+        bannerIndex = safeIndex;
       };
 
-      heroDynamicDots.forEach((dot, index) => {
-        dot.addEventListener('click', () => goToHeroSlide(index));
+      const startBanner = () => {
+        stopBanner();
+        bannerTimer = setInterval(() => goToBanner(bannerIndex + 1), 6000);
+      };
+      function stopBanner() {
+        if (bannerTimer) { clearInterval(bannerTimer); bannerTimer = null; }
+      }
+
+      bannerDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => { goToBanner(index); startBanner(); });
       });
 
-      setInterval(() => {
-        goToHeroSlide(heroSlideIndex + 1);
-      }, 10000);
+      const prevBtn = $('#heroBannerPrev');
+      const nextBtn = $('#heroBannerNext');
+      if (prevBtn) prevBtn.addEventListener('click', () => { goToBanner(bannerIndex - 1); startBanner(); });
+      if (nextBtn) nextBtn.addEventListener('click', () => { goToBanner(bannerIndex + 1); startBanner(); });
+
+      // Sync active dot when user swipes the track manually
+      let scrollSyncTimer = null;
+      heroBannerTrack.addEventListener('scroll', () => {
+        if (scrollSyncTimer) clearTimeout(scrollSyncTimer);
+        scrollSyncTimer = setTimeout(() => {
+          const idx = Math.round(heroBannerTrack.scrollLeft / heroBannerTrack.clientWidth);
+          if (idx !== bannerIndex) {
+            bannerIndex = Math.min(Math.max(idx, 0), bannerSlides.length - 1);
+            bannerDots.forEach((dot, dotIndex) => {
+              dot.classList.toggle('active', dotIndex === bannerIndex);
+            });
+          }
+        }, 120);
+      }, { passive: true });
+
+      startBanner();
     }
   }
 

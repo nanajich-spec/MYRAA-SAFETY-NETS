@@ -248,6 +248,198 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 .m-cta { display: inline-block; margin-top: 12px; margin-left: 20px; background: var(--primary); color: #fff; padding: 10px 18px; border-radius: 4px; font-weight: 700; }
 .m-cta .icon-inline { stroke: #fff; margin-right: 8px; }
 
+/* ===== Hero full-width banner slideshow ===== */
+.hero-banner {
+    position: relative;
+    width: 100%;
+    height: clamp(420px, 62vh, 620px);
+    overflow: hidden;
+    background: #0a1f2e;
+}
+.hero-banner-track {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+.hero-banner-track::-webkit-scrollbar { display: none; }
+.hero-banner-slide {
+    position: relative;
+    flex: 0 0 100%;
+    min-width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
+}
+.hero-banner-slide::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(8, 18, 38, 0.82) 0%, rgba(8, 18, 38, 0.55) 42%, rgba(8, 18, 38, 0.15) 75%, rgba(8, 18, 38, 0.05) 100%);
+}
+.hero-banner-caption {
+    position: relative;
+    z-index: 2;
+    max-width: 1220px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 60px);
+    color: #fff;
+}
+.hero-banner-caption .pill {
+    background: rgba(255, 107, 53, 0.2);
+    border: 1px solid rgba(255, 107, 53, 0.55);
+    color: #ffd9c7;
+    margin-bottom: 16px;
+}
+.hero-banner-caption h1 {
+    font-size: clamp(34px, 6vw, 62px);
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    max-width: 18ch;
+    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+}
+.hero-banner-caption p {
+    font-size: clamp(15px, 2.2vw, 19px);
+    line-height: 1.6;
+    margin-bottom: 22px;
+    max-width: 44ch;
+    color: #eaf1fb;
+}
+.hero-banner-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(8, 18, 38, 0.4);
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+.hero-banner-arrow:hover { background: rgba(255, 107, 53, 0.85); }
+.hero-banner-arrow.prev { left: 16px; }
+.hero-banner-arrow.next { right: 16px; }
+.hero-banner-dots {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    gap: 9px;
+}
+.hero-banner-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    transition: width 0.25s ease, background 0.25s ease;
+}
+.hero-banner-dots span.active {
+    width: 26px;
+    background: var(--primary);
+}
+
+/* ===== Welcome + Enquiry ===== */
+.welcome-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 0.9fr;
+    gap: 40px;
+    align-items: start;
+}
+.welcome-copy .pill { margin-bottom: 14px; }
+.welcome-copy h2 {
+    font-size: clamp(26px, 3.4vw, 38px);
+    color: var(--secondary);
+    margin-bottom: 16px;
+    font-weight: 800;
+    line-height: 1.15;
+}
+.welcome-copy p {
+    color: #44566b;
+    line-height: 1.75;
+    margin-bottom: 14px;
+    font-size: 16px;
+}
+
+/* ===== Scrolling Call / WhatsApp marquee ===== */
+.cta-marquee {
+    background: linear-gradient(135deg, #0a2f6b, #0d3f8f);
+    padding: 30px 0 34px;
+    overflow: hidden;
+}
+.cta-marquee-head {
+    text-align: center;
+    max-width: 1100px;
+    margin: 0 auto 20px;
+    padding: 0 20px;
+    color: #fff;
+}
+.cta-marquee-head h2 {
+    color: #ffd400;
+    font-size: clamp(20px, 3vw, 30px);
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 8px;
+}
+.cta-marquee-head p {
+    color: #eaf1ff;
+    font-size: clamp(14px, 2vw, 18px);
+    font-weight: 700;
+}
+.cta-marquee-viewport {
+    width: 100%;
+    overflow: hidden;
+}
+.cta-marquee-track {
+    display: flex;
+    width: max-content;
+    gap: 18px;
+    animation: ctaMarquee 26s linear infinite;
+}
+.cta-marquee:hover .cta-marquee-track { animation-play-state: paused; }
+.cta-chip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 13px 26px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 16px;
+    color: #fff;
+    white-space: nowrap;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.cta-chip .icon-inline { width: 18px; height: 18px; stroke: #fff; }
+.cta-chip.call { background: #ff3b2f; }
+.cta-chip.call:hover { background: #e22b20; }
+.cta-chip.wa { background: #22c55e; }
+.cta-chip.wa:hover { background: #16a34a; }
+@keyframes ctaMarquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
 .hero {
     background:
         radial-gradient(circle at 12% 8%, rgba(255, 107, 53, 0.14), transparent 30%),
@@ -858,11 +1050,15 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 [data-theme="dark"] .hero-copy li,
 [data-theme="dark"] .section-sub,
 [data-theme="dark"] .about-copy p,
+[data-theme="dark"] .welcome-copy p,
 [data-theme="dark"] .svc p,
 [data-theme="dark"] .contact-card p,
 [data-theme="dark"] .media-count,
 [data-theme="dark"] .counter-grid p {
     color: #d8e5f6;
+}
+[data-theme="dark"] .welcome-copy h2 {
+    color: #f2f7ff;
 }
 [data-theme="dark"] .pill {
     background: rgba(255, 138, 87, 0.16);
@@ -1048,6 +1244,7 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     .hero-dynamic-gallery { aspect-ratio: 16 / 11; max-height: 440px; }
     .hero-copy h1 { font-size: 40px; }
     .hero-form-wrap { padding: 20px; }
+    .welcome-grid { grid-template-columns: 1fr; gap: 28px; }
     .counters { padding: 50px 0; }
     .counter-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 35px 20px; }
     .counter-grid h3 { font-size: 36px; }
@@ -1089,6 +1286,11 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     .section-title { font-size: 28px; }
     .section-sub { font-size: 15px; }
     .hero { padding: 50px 16px; }
+    .hero-banner { height: clamp(360px, 56vh, 460px); }
+    .hero-banner-caption h1 { font-size: clamp(28px, 8vw, 40px); }
+    .hero-banner-caption p { font-size: 15px; max-width: 90%; }
+    .hero-banner-arrow { width: 38px; height: 38px; font-size: 15px; }
+    .cta-chip { font-size: 14px; padding: 11px 20px; }
     .hero-copy h1 { font-size: 36px; margin-bottom: 14px; }
     .hero-copy p { font-size: 15px; }
     .hero-copy li { font-size: 14px; }
