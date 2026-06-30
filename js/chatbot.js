@@ -106,6 +106,7 @@ class MyraaChatbot {
         this.createChatbotWidget();
         this.attachEventListeners();
         this.addChatbotToDOM();
+        this.populateAvailableDates();
         this.updateViewportSizing();
         this.attachViewportListeners();
     }
@@ -193,12 +194,24 @@ class MyraaChatbot {
                 </div>
                 
                 <div class="chatbot-input-area">
-                    <input type="text" id="chatbot-input" class="chatbot-input" placeholder="Type your question...">
-                    <button class="chatbot-send" aria-label="Send message">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M16.6915026,12.4744748 L3.50612381,13.2599618 C3.19218622,13.2599618 3.03521743,13.4170592 3.03521743,13.5741566 L1.15159189,20.0151496 C0.8376543,20.8006365 0.99,21.89 1.77946707,22.52 C2.41,22.99 3.50612381,23.1 4.13399899,22.8429026 L21.714504,14.0454487 C22.6563168,13.5741566 23.1272231,12.6315722 22.9702544,11.6889879 L4.13399899,1.16151496 C3.34915502,0.9 2.40734225,1.00636533 1.77946707,1.4776575 C0.994623095,2.10604706 0.837654326,3.0486314 1.15159189,3.98722575 L3.03521743,10.4282188 C3.03521743,10.5853162 3.19218622,10.7424135 3.50612381,10.7424135 L16.6915026,11.5279004 C16.6915026,11.5279004 17.1624089,11.5279004 17.1624089,12.0991925 C17.1624089,12.6704845 16.6915026,12.4744748 16.6915026,12.4744748 Z"/>
-                        </svg>
-                    </button>
+                    <div class="chatbot-booking-grid">
+                        <input type="text" id="chatbot-name" class="chatbot-input" placeholder="Your Name" autocomplete="name">
+                        <input type="tel" id="chatbot-mobile" class="chatbot-input" placeholder="Mobile Number" inputmode="tel" autocomplete="tel">
+                        <select id="chatbot-service" class="chatbot-input chatbot-select" aria-label="Select service">
+                            <option value="">Select Service</option>
+                            <option value="Balcony Safety Nets">Balcony Safety Nets</option>
+                            <option value="Pigeon & Bird Safety Nets">Pigeon & Bird Safety Nets</option>
+                            <option value="Children Safety Nets">Children Safety Nets</option>
+                            <option value="Invisible Grills">Invisible Grills</option>
+                            <option value="Sports Safety Nets">Sports Safety Nets</option>
+                            <option value="Duct Area Safety Nets">Duct Area Safety Nets</option>
+                            <option value="Construction Safety Nets">Construction Safety Nets</option>
+                        </select>
+                        <select id="chatbot-date" class="chatbot-input chatbot-select" aria-label="Select date">
+                            <option value="">Select Date</option>
+                        </select>
+                        <button id="chatbot-book-btn" class="chatbot-book-btn" type="button">Book Appointment</button>
+                    </div>
                 </div>
             </div>
             
@@ -216,22 +229,27 @@ class MyraaChatbot {
     attachEventListeners() {
         const toggle = this.chatbotWidget.querySelector('#chatbot-toggle');
         const close = this.chatbotWidget.querySelector('.chatbot-close');
-        const sendBtn = this.chatbotWidget.querySelector('.chatbot-send');
-        const input = this.chatbotWidget.querySelector('#chatbot-input');
+        const mobileInput = this.chatbotWidget.querySelector('#chatbot-mobile');
+        const bookBtn = this.chatbotWidget.querySelector('#chatbot-book-btn');
         const quickReplies = this.chatbotWidget.querySelectorAll('.quick-reply');
 
         toggle.addEventListener('click', () => this.toggleChat());
         close.addEventListener('click', () => this.toggleChat());
-        sendBtn.addEventListener('click', () => this.sendMessage());
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.sendMessage();
-        });
+
+        if (mobileInput) {
+            mobileInput.addEventListener('input', () => {
+                mobileInput.value = mobileInput.value.replace(/[^0-9]/g, '').slice(0, 10);
+            });
+        }
+
+        if (bookBtn) {
+            bookBtn.addEventListener('click', () => this.submitBookingRequest());
+        }
 
         quickReplies.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const query = e.target.getAttribute('data-query');
-                input.value = query;
-                this.sendMessage();
+                this.sendMessage(query);
             });
         });
     }
@@ -247,8 +265,8 @@ class MyraaChatbot {
         const vw = Math.max(0, Math.floor(vp ? vp.width : window.innerWidth));
         const vh = Math.max(0, Math.floor(vp ? vp.height : window.innerHeight));
 
-        const dynWidth = Math.max(240, Math.min(340, Math.floor(vw * 0.82)));
-        const dynHeight = Math.max(190, Math.min(420, Math.floor(vh * 0.40)));
+        const dynWidth = Math.max(220, Math.min(320, Math.floor(vw * 0.76)));
+        const dynHeight = Math.max(170, Math.min(300, Math.floor(vh * 0.32)));
 
         this.chatbotWidget.style.setProperty('--chatbot-dyn-width', `${dynWidth}px`);
         this.chatbotWidget.style.setProperty('--chatbot-dyn-height', `${dynHeight}px`);
@@ -264,30 +282,107 @@ class MyraaChatbot {
         }
     }
 
+    populateAvailableDates() {
+        const dateSelect = this.chatbotWidget.querySelector('#chatbot-date');
+        if (!dateSelect) return;
+
+        const today = new Date();
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(today);
+            date.setDate(today.getDate() + i);
+
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            const value = `${yyyy}-${mm}-${dd}`;
+
+            const label = `${dayNames[date.getDay()]} - ${dd}/${mm}/${yyyy}`;
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = label;
+            dateSelect.appendChild(option);
+        }
+    }
+
+    submitBookingRequest() {
+        const nameInput = this.chatbotWidget.querySelector('#chatbot-name');
+        const mobileInput = this.chatbotWidget.querySelector('#chatbot-mobile');
+        const serviceSelect = this.chatbotWidget.querySelector('#chatbot-service');
+        const dateSelect = this.chatbotWidget.querySelector('#chatbot-date');
+
+        const name = nameInput ? nameInput.value.trim() : '';
+        const mobile = mobileInput ? mobileInput.value.trim() : '';
+        const service = serviceSelect ? serviceSelect.value : '';
+        const date = dateSelect ? dateSelect.value : '';
+
+        const mobileDigits = this.extractMobileNumber(mobile);
+
+        if (!name) {
+            this.addMessageToUI('Please enter your name to continue booking.', 'bot');
+            return;
+        }
+        if (!mobileDigits) {
+            this.addMessageToUI('Please enter a valid 10-digit mobile number.', 'bot');
+            return;
+        }
+        if (!service) {
+            this.addMessageToUI('Please select a service.', 'bot');
+            return;
+        }
+        if (!date) {
+            this.addMessageToUI('Please select a preferred date from next 7 days.', 'bot');
+            return;
+        }
+
+        const payload = {
+            name,
+            mobile: mobileDigits,
+            service,
+            time: date,
+            city: 'From Chatbot'
+        };
+
+        this.sendLeadNotification(payload);
+        const waUrl = this.notifyWhatsApp(payload);
+        this.sentLeadNumbers.add(mobileDigits);
+
+        this.addMessageToUI(`Booking request submitted for ${service} on ${date}.`, 'user');
+        this.addMessageToUI(`✅ Thanks ${name}! We received your booking.\n\nWe triggered notification to support WhatsApp and email for quick confirmation.\n\n📞 +91 9493948842\n📧 myraa@myraasafetynets.com\n📲 ${waUrl}`, 'bot');
+
+        if (nameInput) nameInput.value = '';
+        if (mobileInput) mobileInput.value = '';
+        if (serviceSelect) serviceSelect.value = '';
+        if (dateSelect) dateSelect.value = '';
+    }
+
     toggleChat() {
         const container = this.chatbotWidget.querySelector('.chatbot-container');
-        const toggle = this.chatbotWidget.querySelector('#chatbot-toggle');
         
         this.isOpen = !this.isOpen;
         container.classList.toggle('open', this.isOpen);
         
         if (this.isOpen) {
-            this.chatbotWidget.querySelector('#chatbot-input').focus();
+            const nameInput = this.chatbotWidget.querySelector('#chatbot-name');
+            if (nameInput) nameInput.focus();
             // Hide notification badge
             const badge = this.chatbotWidget.querySelector('#notification-badge');
             if (badge) badge.style.display = 'none';
         }
     }
 
-    async sendMessage() {
+    async sendMessage(messageOverride = null) {
         const input = this.chatbotWidget.querySelector('#chatbot-input');
-        const message = input.value.trim();
+        const message = typeof messageOverride === 'string'
+            ? messageOverride.trim()
+            : (input ? input.value.trim() : '');
 
         if (!message) return;
 
         // Add user message to UI
         this.addMessageToUI(message, 'user');
-        input.value = '';
+        if (input) input.value = '';
         this.messageCount++;
 
         // Get response
