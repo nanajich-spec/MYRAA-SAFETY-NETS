@@ -39,16 +39,20 @@
 
 @media (max-width: 480px) {
     .chatbot-container {
-        width: min(var(--chatbot-dyn-width), calc(100vw - 24px));
+        width: calc(100vw - 16px);
+        max-width: 440px;
         height: 0;
-        max-height: min(var(--chatbot-dyn-height), calc(100dvh - 210px));
-        bottom: calc(82px + env(safe-area-inset-bottom));
-        right: 12px;
-        left: auto;
+        max-height: 88dvh;
+        bottom: calc(8px + env(safe-area-inset-bottom));
+        right: 8px;
+        left: 8px;
+        margin: 0 auto;
+        border-radius: 18px;
     }
 
     .chatbot-container.open {
-        height: min(var(--chatbot-dyn-height), calc(100dvh - 210px));
+        height: 78dvh;
+        max-height: 88dvh;
     }
 }
 
@@ -354,12 +358,15 @@
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .chatbot-container {
-        width: min(var(--chatbot-dyn-width), calc(100vw - 20px));
-        max-height: min(var(--chatbot-dyn-height), calc(100dvh - 220px));
+        width: min(420px, calc(100vw - 24px));
+        max-height: 82dvh;
+        bottom: calc(86px + env(safe-area-inset-bottom));
+        right: 12px;
     }
 
     .chatbot-container.open {
-        height: min(var(--chatbot-dyn-height), calc(100dvh - 220px));
+        height: 70dvh;
+        max-height: 82dvh;
     }
 
     .message-content {

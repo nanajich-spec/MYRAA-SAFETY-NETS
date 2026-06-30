@@ -272,7 +272,12 @@ class MyraaChatbot {
         container.classList.toggle('open', this.isOpen);
         
         if (this.isOpen) {
-            this.chatbotWidget.querySelector('#chatbot-input').focus();
+            // On mobile, avoid auto-focusing the input so the keyboard
+            // does not immediately cover the chat. User taps to type.
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            if (!isMobile) {
+                this.chatbotWidget.querySelector('#chatbot-input').focus();
+            }
             // Hide notification badge
             const badge = this.chatbotWidget.querySelector('#notification-badge');
             if (badge) badge.style.display = 'none';
