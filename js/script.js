@@ -180,15 +180,16 @@
   if (counters.length) {
     const animate = (el) => {
       const target = Number(el.dataset.target || '0');
+      const suffix = el.dataset.suffix || '';
       const duration = 1400;
       const step = Math.max(1, Math.ceil(target / (duration / 16)));
       let current = 0;
       const tick = () => {
         current += step;
         if (current >= target) {
-          el.textContent = target.toString();
+          el.textContent = target.toString() + suffix;
         } else {
-          el.textContent = current.toString();
+          el.textContent = current.toString() + suffix;
           requestAnimationFrame(tick);
         }
       };
@@ -467,6 +468,13 @@
 
   const reviews = $$('.review');
   const dotsWrap = $('#reviewDots');
+  // Render golden star ratings inside each review's heading
+  reviews.forEach((r) => {
+    const h = r.querySelector('h4');
+    if (h && !h.querySelector('.review-stars')) {
+      h.innerHTML = '<span class="review-stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</span><span class="review-rating-text">5.0</span>';
+    }
+  });
   if (reviews.length && dotsWrap) {
     let idx = 0;
     dotsWrap.innerHTML = reviews.map((_, i) => `<button data-i="${i}" class="${i === 0 ? 'active' : ''}"></button>`).join('');
