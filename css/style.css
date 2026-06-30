@@ -1486,9 +1486,9 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     .review { padding: 16px; }
     .review h4 { font-size: 16px; }
     .float-wa, .float-call { width: 52px; height: 52px; font-size: 18px; right: 12px; }
-    .float-wa { top: auto; bottom: 92px; }
-    .float-call { top: auto; bottom: 152px; }
-    .back-to-top { width: 46px; height: 46px; bottom: 212px; right: 13px; }
+    .float-wa { top: auto; bottom: calc(86px + env(safe-area-inset-bottom)); }
+    .float-call { top: auto; bottom: calc(150px + env(safe-area-inset-bottom)); }
+    .back-to-top { width: 46px; height: 46px; bottom: calc(214px + env(safe-area-inset-bottom)); right: 12px; }
 }
 
 @media (max-width: 540px) {
@@ -1567,7 +1567,7 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     .footer h4 { font-size: 13px; margin-bottom: 10px; }
     .footer li a { font-size: 12px; }
     .copyright { font-size: 11px; overflow-x: hidden; word-wrap: break-word; }
-    .float-wa, .float-call { width: 52px; height: 52px; font-size: 18px; right: 8px; flex-shrink: 0; }
+    .float-wa, .float-call { width: 52px; height: 52px; font-size: 18px; right: 12px; flex-shrink: 0; }
 }
 
 @media (max-width: 480px) {
@@ -1586,7 +1586,7 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     .service-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; overflow: hidden; }
     .gallery-item { width: 180px; height: 130px; }
     .contact .container { overflow: hidden; }
-    .float-wa, .float-call { width: 50px; height: 50px; font-size: 18px; right: 8px; }
+    .float-wa, .float-call { width: 50px; height: 50px; font-size: 18px; right: 12px; }
 }
 
 @media (max-width: 380px) {

@@ -385,7 +385,7 @@
     #chatbot-toggle {
         width: 56px;
         height: 56px;
-        bottom: calc(18px + env(safe-area-inset-bottom));
+        bottom: calc(16px + env(safe-area-inset-bottom));
         right: 12px;
     }
 }
@@ -394,7 +394,7 @@
     #chatbot-toggle {
         width: 56px;
         height: 56px;
-        bottom: calc(20px + env(safe-area-inset-bottom));
+        bottom: calc(16px + env(safe-area-inset-bottom));
         right: 12px;
     }
 
