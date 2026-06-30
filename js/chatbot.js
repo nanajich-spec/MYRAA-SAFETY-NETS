@@ -19,7 +19,6 @@ class MyraaChatbot {
                     description: 'Premium residential safety solutions for balconies',
                     features: ['Weather-resistant materials', 'UV protection', 'Transparent design', 'Durability up to 10 years'],
                     priceRange: '₹3,000 - ₹15,000',
-                    areas: ['Hyderabad', 'Bangalore', 'Vijayawada'],
                     installation: '24-48 hours',
                     warranty: '2 years'
                 },
@@ -28,7 +27,6 @@ class MyraaChatbot {
                     description: 'Hygienic bird control solutions to keep birds away',
                     features: ['Mesh design', 'Humane bird control', 'Prevents diseases', 'Easy maintenance'],
                     priceRange: '₹2,500 - ₹10,000',
-                    areas: ['Hyderabad', 'Visakhapatnam', 'Bangalore'],
                     installation: '24-48 hours',
                     warranty: '2 years'
                 },
@@ -37,7 +35,6 @@ class MyraaChatbot {
                     description: 'Protective nets specifically designed for child safety',
                     features: ['High tensile strength', 'Non-toxic materials', 'Soft mesh', 'Certified safety standards'],
                     priceRange: '₹4,000 - ₹12,000',
-                    areas: ['Hyderabad', 'Bangalore'],
                     installation: '24-48 hours',
                     warranty: '3 years'
                 },
@@ -46,10 +43,37 @@ class MyraaChatbot {
                     description: 'Modern security solutions without compromising aesthetics',
                     features: ['Transparent appearance', 'Strong steel cables', 'Weather-resistant', 'Easy to maintain'],
                     priceRange: '₹5,000 - ₹18,000',
-                    areas: ['Hyderabad', 'Bangalore', 'Vijayawada'],
                     installation: '2-3 days',
                     warranty: '3 years'
+                },
+                'sports-safety-nets': {
+                    name: 'Sports Safety Nets',
+                    description: 'Protective netting for cricket, football, badminton and multi-sport courts',
+                    features: ['High-impact resistant mesh', 'Custom court sizing', 'Indoor/outdoor installation', 'Long-term durability'],
+                    priceRange: '₹8,000 - ₹50,000',
+                    installation: '2-4 days',
+                    warranty: '2 years'
+                },
+                'duct-area-covering-nets': {
+                    name: 'Duct Area & Utility Covering Nets',
+                    description: 'Safety covering for utility shafts and open ducts in apartments/commercial buildings',
+                    features: ['Strong knotless mesh', 'Rust-resistant fittings', 'Neat finishing', 'Low maintenance'],
+                    priceRange: '₹3,500 - ₹14,000',
+                    installation: '24-48 hours',
+                    warranty: '2 years'
+                },
+                'construction-safety-nets': {
+                    name: 'Construction Safety Nets',
+                    description: 'Site safety solutions for workers, materials and perimeter protection',
+                    features: ['Industrial-grade netting', 'Fall protection support', 'Dust/debris control options', 'Project-based deployment'],
+                    priceRange: 'Custom quote',
+                    installation: 'Project dependent',
+                    warranty: 'As per project scope'
                 }
+            },
+            serviceAreas: {
+                primary: ['Hyderabad'],
+                secondary: ['Bangalore', 'Vijayawada', 'Visakhapatnam', 'Chennai', 'Pune', 'Mumbai']
             },
             support: {
                 phone: '+91 9493948842',
@@ -97,14 +121,14 @@ class MyraaChatbot {
                 <div class="chatbot-messages" id="chatbot-messages">
                     <div class="message bot-message">
                         <div class="message-content">
-                            <p>👋 Hello! Welcome to Myraa Safety Nets. How can I help you today?</p>
+                            <p>👋 Hi! Welcome to Myraa Safety Nets & Invisible Grills. How can I help you today?</p>
                             <p style="font-size: 0.85em; margin-top: 8px; opacity: 0.8;">Ask me about:</p>
                             <div class="quick-replies">
-                                <button class="quick-reply" data-query="Tell me about balcony safety nets">Balcony Nets</button>
-                                <button class="quick-reply" data-query="What about pigeon safety nets">Pigeon Nets</button>
-                                <button class="quick-reply" data-query="Children safety nets information">Child Safety</button>
-                                <button class="quick-reply" data-query="Tell me about invisible grills">Invisible Grills</button>
-                                <button class="quick-reply" data-query="Contact information and support">Contact Us</button>
+                                <button class="quick-reply" data-query="What services do you provide?">All Services</button>
+                                <button class="quick-reply" data-query="Tell me about pigeon and bird safety nets">Bird Nets</button>
+                                <button class="quick-reply" data-query="Tell me about sports safety nets">Sports Nets</button>
+                                <button class="quick-reply" data-query="What is the pricing for all services?">Pricing</button>
+                                <button class="quick-reply" data-query="Book a free inspection">Book Inspection</button>
                             </div>
                         </div>
                     </div>
@@ -120,10 +144,8 @@ class MyraaChatbot {
                 </div>
             </div>
             
-            <button id="chatbot-toggle" class="chatbot-toggle" aria-label="Open chat" title="Chat with Myraa Support">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-                </svg>
+            <button id="chatbot-toggle" class="chatbot-toggle" aria-label="Open chat" title="Talk to support agent">
+                <img src="images/support-agent.svg" class="chatbot-agent-avatar" alt="Support agent">
                 <span class="notification-badge" id="notification-badge" style="display: none;">1</span>
             </button>
         `;
@@ -226,19 +248,16 @@ class MyraaChatbot {
 
     async getAIResponse(userMessage) {
         try {
-            const systemPrompt = `You are a helpful customer support assistant for Myraa Safety Nets, a professional safety net and invisible grill installation company in Hyderabad. 
-You provide information about:
-- Balcony Safety Nets
-- Pigeon & Bird Safety Nets
-- Children Safety Nets
-- Invisible Grills
-- Construction Safety Nets
-
-You should be professional, friendly, and helpful. Keep responses concise (2-3 sentences max).
-Always encourage customers to call +91 9493948842 or email myraa@myraasafetynets.com for bookings.
+            const systemPrompt = `You are the digital support assistant for Myraa Safety Nets & Invisible Grills.
+Always greet users naturally when they say hi/hello.
+If the user asks about services, list ALL services first (balcony nets, pigeon/bird nets, children safety nets, invisible grills, sports safety nets, duct area covering nets, construction safety nets) before asking a follow-up.
+Only provide service area/city details when the user explicitly asks about location/area/city coverage.
+Use a friendly, interactive sales-support tone and end with a practical next step.
+Always include phone +91 9493948842 for bookings.
 
 Available services: ${JSON.stringify(this.serviceDatabase.services)}
-Support info: ${JSON.stringify(this.serviceDatabase.support)}`;
+Support info: ${JSON.stringify(this.serviceDatabase.support)}
+Service areas: ${JSON.stringify(this.serviceDatabase.serviceAreas)}`;
 
             const response = await fetch(this.baseUrl, {
                 method: 'POST',
@@ -271,188 +290,76 @@ Support info: ${JSON.stringify(this.serviceDatabase.support)}`;
     }
 
     getLocalResponse(userMessage) {
-        const lowerMessage = userMessage.toLowerCase();
+        const lowerMessage = userMessage.toLowerCase().trim();
 
-        // Match keywords and provide responses
-        const responses = [
-            // Balcony nets queries
-            {
-                keywords: ['balcony', 'net', 'residential', 'apartment'],
-                response: `🏠 **Balcony Safety Nets** are our premium residential safety solutions!
+        const hasAny = (keywords) => keywords.some((keyword) => lowerMessage.includes(keyword));
 
-**Features:**
-• Weather-resistant materials with UV protection
-• Transparent design for unobstructed views
-• Lasts up to 10 years
-• Price: ₹3,000 - ₹15,000
-• Installation: 24-48 hours
-• **2-year warranty**
+        const greetingKeywords = ['hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening'];
+        const serviceIntentKeywords = ['service', 'services', 'what do you provide', 'what do you offer', 'offerings', 'catalog'];
+        const areaIntentKeywords = ['area', 'areas', 'location', 'locations', 'city', 'cities', 'where do you serve', 'serve my area'];
+        const pricingKeywords = ['price', 'pricing', 'cost', 'quote', 'how much'];
+        const installationKeywords = ['installation', 'install', 'time', 'duration', 'how long', 'process'];
+        const warrantyKeywords = ['warranty', 'guarantee', 'guarantees'];
+        const bookingKeywords = ['book', 'inspection', 'visit', 'site visit', 'schedule'];
+        const contactKeywords = ['contact', 'call', 'phone', 'email', 'whatsapp', 'support'];
 
-Available in: Hyderabad, Bangalore, Vijayawada
-
-📞 Call +91 9493948842 for a free site inspection!`
-            },
-            // Pigeon nets queries
-            {
-                keywords: ['pigeon', 'bird', 'control', 'hygienic'],
-                response: `🕊️ **Pigeon & Bird Safety Nets** - Keep birds away safely!
-
-**Features:**
-• Hygienic bird control solution
-• Prevents diseases and mess
-• Mesh design doesn't harm birds
-• Easy maintenance
-• Price: ₹2,500 - ₹10,000
-• Installation: 24-48 hours
-• **2-year warranty**
-
-Available in: Hyderabad, Visakhapatnam, Bangalore
-
-📞 Schedule free inspection: +91 9493948842`
-            },
-            // Children safety nets
-            {
-                keywords: ['child', 'children', 'kids', 'baby'],
-                response: `👶 **Children Safety Nets** - Keep your kids safe!
-
-**Features:**
-• High tensile strength design
-• Non-toxic, soft mesh materials
-• Certified safety standards
-• Perfect for balconies and windows
-• Price: ₹4,000 - ₹12,000
-• Installation: 24-48 hours
-• **3-year warranty**
-
-Available in: Hyderabad, Bangalore
-
-✅ Peace of mind for your family!
-📞 Call +91 9493948842 for details`
-            },
-            // Invisible grills
-            {
-                keywords: ['invisible', 'grill', 'security', 'transparent'],
-                response: `🔒 **Invisible Grills** - Modern security without compromising beauty!
-
-**Features:**
-• Transparent appearance - no visible bars
-• Strong steel cables
-• Weather-resistant & low maintenance
-• Maintains aesthetic appeal
-• Price: ₹5,000 - ₹18,000
-• Installation: 2-3 days
-• **3-year warranty**
-
-Available in: Hyderabad, Bangalore, Vijayawada
-
-💡 Perfect for modern homes!
-📞 Free consultation: +91 9493948842`
-            },
-            // Price queries
-            {
-                keywords: ['price', 'cost', 'how much', 'expensive'],
-                response: `💰 **Our Pricing:**
-
-• **Balcony Nets:** ₹3,000 - ₹15,000
-• **Pigeon Nets:** ₹2,500 - ₹10,000
-• **Children Safety:** ₹4,000 - ₹12,000
-• **Invisible Grills:** ₹5,000 - ₹18,000
-
-Prices vary based on:
-- Area size & dimensions
-- Material quality
-- Installation complexity
-
-📞 **Call +91 9493948842** for a FREE customized quote!
-We offer flexible payment options: Cash, Online Transfer, Cards, UPI`
-            },
-            // Installation queries
-            {
-                keywords: ['installation', 'how long', 'time', 'process', 'work'],
-                response: `⏱️ **Installation Process:**
-
-**Standard Installation:** 24-48 hours
-**Invisible Grills:** 2-3 days
-
-**Our Process:**
-1. Free site inspection
-2. Customized quote
-3. Confirm order
-4. Professional installation
-5. Quality check
-
-✅ All workmanship guaranteed for 2-3 years!
-
-📞 Schedule your free inspection: +91 9493948842`
-            },
-            // Warranty queries
-            {
-                keywords: ['warranty', 'guarantee', 'guarantee'],
-                response: `✅ **Our Guarantees:**
-
-• **All Services:** 2-3 year warranty
-• **Material Quality:** UV-resistant & weather-proof
-• **Workmanship:** Complete guarantee
-• **Free Maintenance:** During warranty period
-
-We stand behind our work with complete peace of mind!
-
-📞 Questions? Call +91 9493948842`
-            },
-            // Contact queries
-            {
-                keywords: ['contact', 'call', 'phone', 'email', 'whatsapp', 'support'],
-                response: `📞 **Contact Myraa Safety Nets:**
-
-**Phone:** +91 9493948842
-**Email:** myraa@myraasafetynets.com
-**Hours:** 24/7 Available
-
-**Free Services:**
-✓ Site inspection
-✓ Customized quote
-✓ Expert consultation
-
-**Payment Methods:**
-💳 Cash, Online Transfer, Credit/Debit Card, UPI
-
-📱 WhatsApp us for quick response!`
-            },
-            // Service areas
-            {
-                keywords: ['area', 'location', 'service', 'city', 'where'],
-                response: `📍 **Our Service Areas:**
-
-**Primary:** Hyderabad
-**Secondary:** Bangalore, Vijayawada, Visakhapatnam, Chennai, Pune, Mumbai
-
-We provide professional installation across all these cities!
-
-📞 Check if we serve your area: +91 9493948842`
-            }
-        ];
-
-        // Find matching response
-        for (const resp of responses) {
-            if (resp.keywords.some(keyword => lowerMessage.includes(keyword))) {
-                return resp.response;
-            }
+        if (hasAny(greetingKeywords)) {
+            return `👋 Hi! Welcome to **Myraa Safety Nets & Invisible Grills**.\n\nI can help you with services, pricing, installation time, and booking.\n\nYou can start with:\n• "Show all services"\n• "Bird nets details"\n• "Sports nets price"\n\n📞 +91 9493948842`;
         }
 
-        // Default response
-        return `Thank you for your interest in Myraa Safety Nets! 😊
+        if (hasAny(serviceIntentKeywords)) {
+            return `🛠️ **Our Services:**\n\n• Balcony Safety Nets\n• Pigeon & Bird Safety Nets\n• Children Safety Nets\n• Invisible Grills\n• Sports Safety Nets\n• Duct Area & Utility Covering Nets\n• Construction Safety Nets\n\nTell me which one you want, and I will share features, pricing, and installation details instantly.\n\n📞 For quick booking: +91 9493948842`;
+        }
 
-I can help you with:
-• **Balcony Safety Nets** - Residential protection
-• **Pigeon & Bird Nets** - Hygienic bird control
-• **Children Safety Nets** - Kid protection
-• **Invisible Grills** - Modern security
-• **Pricing & Installation** details
-• **Contact & Support** information
+        if (hasAny(['balcony'])) {
+            return `🏠 **Balcony Safety Nets**\n\n• Price: ₹3,000 - ₹15,000\n• Installation: 24-48 hours\n• Warranty: 2 years\n• Strong UV-resistant and weatherproof material\n\nWould you like an estimated cost for your balcony size?\n📞 +91 9493948842`;
+        }
 
-Feel free to ask any specific questions! Or call us directly:
-📞 **+91 9493948842** (24/7)
-📧 **myraa@myraasafetynets.com**`;
+        if (hasAny(['pigeon', 'bird', 'birds'])) {
+            return `🕊️ **Pigeon & Bird Safety Nets**\n\n• Price: ₹2,500 - ₹10,000\n• Installation: 24-48 hours\n• Warranty: 2 years\n• Humane bird control with hygienic protection\n\nWould you like me to explain mesh types for balcony vs duct area?\n📞 +91 9493948842`;
+        }
+
+        if (hasAny(['child', 'children', 'kids', 'kid', 'baby'])) {
+            return `👶 **Children Safety Nets**\n\n• Price: ₹4,000 - ₹12,000\n• Installation: 24-48 hours\n• Warranty: 3 years\n• High-tensile, soft, child-safe mesh\n\nShare your floor type (apartment/villa) and I can suggest the best safety setup.\n📞 +91 9493948842`;
+        }
+
+        if (hasAny(['invisible grill', 'invisible grills', 'grill', 'grills'])) {
+            return `🔒 **Invisible Grills**\n\n• Price: ₹5,000 - ₹18,000\n• Installation: 2-3 days\n• Warranty: 3 years\n• Premium modern look with strong safety cables\n\nWould you like 2 mm or 2.5 mm cable guidance based on your use-case?\n📞 +91 9493948842`;
+        }
+
+        if (hasAny(['sports', 'cricket', 'football', 'badminton', 'court net'])) {
+            return `🏅 **Sports Safety Nets**\n\n• Suitable for cricket, football, badminton, multi-sport courts\n• Price: ₹8,000 - ₹50,000 (depends on area and height)\n• Installation: 2-4 days\n• Warranty: 2 years\n\nTell me your ground/court dimensions and I will suggest a practical setup.\n📞 +91 9493948842`;
+        }
+
+        if (hasAny(['duct', 'utility', 'shaft', 'covering net'])) {
+            return `🏢 **Duct Area & Utility Covering Nets**\n\n• Price: ₹3,500 - ₹14,000\n• Installation: 24-48 hours\n• Warranty: 2 years\n• Neat finishing with strong rust-resistant fittings\n\nIf you share your duct size, I can give an estimated range.\n📞 +91 9493948842`;
+        }
+
+        if (hasAny(['construction', 'site safety', 'industrial'])) {
+            return `🏗️ **Construction Safety Nets**\n\n• Industrial-grade project safety net solutions\n• Pricing: Custom quote\n• Installation: As per project scope\n• Includes perimeter and fall-protection support\n\nShare project type and site size for a custom plan.\n📞 +91 9493948842`;
+        }
+
+        if (hasAny(pricingKeywords)) {
+            return `💰 **Quick Pricing Guide:**\n\n• Balcony Nets: ₹3,000 - ₹15,000\n• Bird Nets: ₹2,500 - ₹10,000\n• Children Nets: ₹4,000 - ₹12,000\n• Invisible Grills: ₹5,000 - ₹18,000\n• Sports Nets: ₹8,000 - ₹50,000\n• Duct Covering Nets: ₹3,500 - ₹14,000\n\nFor exact pricing, share dimensions for a fast quote.\n📞 +91 9493948842`;
+        }
+
+        if (hasAny(installationKeywords)) {
+            return `⏱️ **Installation Timeline:**\n\n• Most net services: 24-48 hours\n• Invisible grills: 2-3 days\n• Sports nets: 2-4 days\n\nFlow: site inspection → quote → confirmation → installation → quality check.\n\n📞 Book inspection: +91 9493948842`;
+        }
+
+        if (hasAny(warrantyKeywords)) {
+            return `✅ **Warranty & Support:**\n\n• Nets: usually 2 years\n• Children safety / invisible grills: up to 3 years\n• Material quality and workmanship assurance\n\nIf you mention your selected service, I can share exact warranty terms.\n📞 +91 9493948842`;
+        }
+
+        if (hasAny(areaIntentKeywords)) {
+            return `📍 **Our Service Areas:**\n\n**Primary:** Hyderabad\n**Secondary:** Bangalore, Vijayawada, Visakhapatnam, Chennai, Pune, Mumbai\n\nWe provide professional installation across all these cities.\n📞 Check your area now: +91 9493948842`;
+        }
+
+        if (hasAny(bookingKeywords) || hasAny(contactKeywords)) {
+            return `📞 **Contact & Booking:**\n\n• Call: +91 9493948842\n• Email: myraa@myraasafetynets.com\n• WhatsApp: https://wa.me/919493948842\n• Support: 24/7\n\n✅ Free site inspection available. Reply with your city to schedule quickly.`;
+        }
+
+        return `I can help with **all Myraa services**: balcony nets, bird nets, children safety nets, invisible grills, sports nets, duct covering nets, and construction safety nets.\n\nAsk me like:\n• "Show all services"\n• "Sports nets details"\n• "Bird nets price"\n• "Book free inspection"\n\n📞 +91 9493948842`;
     }
 }
 

@@ -12,7 +12,7 @@
 /* Chatbot Container */
 .chatbot-container {
     position: fixed;
-    bottom: 20px;
+    bottom: 90px;
     right: 20px;
     width: 380px;
     height: 0;
@@ -40,7 +40,7 @@
         width: calc(100vw - 20px);
         height: 0;
         max-height: 70vh;
-        bottom: 20px;
+        bottom: 74px;
         right: 10px;
         left: 10px;
     }
@@ -279,7 +279,7 @@
 /* Toggle Button */
 #chatbot-toggle {
     position: fixed;
-    bottom: 20px;
+    bottom: 160px;
     right: 20px;
     width: 56px;
     height: 56px;
@@ -309,6 +309,13 @@
     width: 28px;
     height: 28px;
     fill: currentColor;
+}
+
+.chatbot-agent-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .chatbot-container.open ~ #chatbot-toggle {
@@ -359,6 +366,8 @@
     #chatbot-toggle {
         width: 50px;
         height: 50px;
+        bottom: 138px;
+        right: 10px;
     }
 
     #chatbot-toggle svg {
