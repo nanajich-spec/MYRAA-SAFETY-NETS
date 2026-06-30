@@ -79,7 +79,7 @@ class MyraaChatbot {
             },
             serviceAreas: {
                 primary: ['Hyderabad'],
-                secondary: ['Bangalore', 'Visakhapatnam']
+                secondary: []
             },
             support: {
                 contactName: 'Myraa Safety Nets & Invisible Grills Support Desk',
@@ -455,7 +455,7 @@ Service areas: ${JSON.stringify(this.serviceDatabase.serviceAreas)}`;
         }
 
         if (hasAny(areaIntentKeywords)) {
-            return `📍 **Our Service Areas:**\n\n**Primary:** Hyderabad\n**Secondary:** Bangalore, Visakhapatnam\n\nWe provide professional installation across these cities.\n📞 Check your area now: +91 9493948842`;
+            return `📍 **Our Service Area:**\n\n**Hyderabad**\n\nWe provide professional installation across Hyderabad.\n📞 Check your area now: +91 9493948842`;
         }
 
         if (hasAny(bookingKeywords)) {
@@ -468,7 +468,7 @@ Service areas: ${JSON.stringify(this.serviceDatabase.serviceAreas)}`;
         }
 
         if (hasAny(contactKeywords)) {
-            return `📞 **Myraa Safety Nets & Invisible Grills - Contact Details**\n\n• Contact Name: ${this.serviceDatabase.support.contactName}\n• Mobile: ${this.serviceDatabase.support.phone}\n• WhatsApp: ${this.serviceDatabase.support.whatsapp}\n• Email: ${this.serviceDatabase.support.email}\n• Locations: Hyderabad, Bangalore, Visakhapatnam\n• Support Hours: ${this.serviceDatabase.support.hours}\n\n✅ Want to book now? Type: **Book appointment**`;
+            return `📞 **Myraa Safety Nets & Invisible Grills - Contact Details**\n\n• Contact Name: ${this.serviceDatabase.support.contactName}\n• Mobile: ${this.serviceDatabase.support.phone}\n• WhatsApp: ${this.serviceDatabase.support.whatsapp}\n• Email: ${this.serviceDatabase.support.email}\n• Location: Hyderabad\n• Support Hours: ${this.serviceDatabase.support.hours}\n\n✅ Want to book now? Type: **Book appointment**`;
         }
 
         return `I can help with **all Myraa services**: balcony nets, bird nets, children safety nets, invisible grills, sports nets, duct covering nets, and construction safety nets.\n\nAsk me like:\n• "Show all services"\n• "Sports nets details"\n• "Bird nets details"\n• "Book free inspection"\n\n📞 +91 9493948842`;
@@ -504,7 +504,7 @@ Service areas: ${JSON.stringify(this.serviceDatabase.serviceAreas)}`;
                 });
             }
             this.appointmentFlow.step = 'city';
-            return `Perfect. Which city do you need service in?\n\nOptions: Hyderabad, Bangalore, Visakhapatnam`;
+            return `Perfect. Which city do you need service in?\n\nOption: Hyderabad`;
         }
 
         if (step === 'city') {
