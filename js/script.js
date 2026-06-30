@@ -482,35 +482,38 @@
     setInterval(() => show((idx + 1) % reviews.length), 4500);
   }
 
-  const heroDynamicImage = $('#heroDynamicImage');
-  const heroDynamicDots = $$('#heroDynamicDots span');
-  if (heroDynamicImage && heroDynamicDots.length) {
-    const heroImages = [
-      'images/safetynet.jpg',
-      'images/safetynet1.jpg',
-      'images/safetynet3.jpg',
-      'images/safetynet4.jpg',
-      'images/safetynet5.jpg',
-      'images/WhatsApp Image 2026-05-29 at 7.12.08 AM.jpeg'
-    ];
+  const heroDynamicGallery = $('#heroDynamicGallery');
+  const heroDynamicTrack = $('#heroDynamicTrack');
+  const heroDynamicDotsWrap = $('#heroDynamicDots');
+  if (heroDynamicGallery && heroDynamicTrack && heroDynamicDotsWrap) {
+    const heroSlides = $$('.hero-slide', heroDynamicTrack);
+    if (heroSlides.length) {
+      let heroSlideIndex = 0;
+      heroDynamicDotsWrap.innerHTML = heroSlides
+        .map((_, i) => `<span class="${i === 0 ? 'active' : ''}"></span>`)
+        .join('');
+      const heroDynamicDots = $$('#heroDynamicDots span');
 
-    let heroImageIndex = 0;
-    const updateHeroImage = (index) => {
-      heroDynamicImage.src = heroImages[index];
-      heroDynamicDots.forEach((dot, dotIndex) => {
-        dot.classList.toggle('active', dotIndex === index);
+      const goToHeroSlide = (index) => {
+        const safeIndex = index >= heroSlides.length ? 0 : index;
+        heroDynamicTrack.scrollTo({
+          left: heroSlides[safeIndex].offsetLeft - 14,
+          behavior: 'smooth'
+        });
+        heroDynamicDots.forEach((dot, dotIndex) => {
+          dot.classList.toggle('active', dotIndex === safeIndex);
+        });
+        heroSlideIndex = safeIndex;
+      };
+
+      heroDynamicDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => goToHeroSlide(index));
       });
-      heroImageIndex = index;
-    };
 
-    heroDynamicDots.forEach((dot, index) => {
-      dot.addEventListener('click', () => updateHeroImage(index));
-    });
-
-    setInterval(() => {
-      const nextIndex = (heroImageIndex + 1) % heroImages.length;
-      updateHeroImage(nextIndex);
-    }, 2800);
+      setInterval(() => {
+        goToHeroSlide(heroSlideIndex + 1);
+      }, 10000);
+    }
   }
 
   const quickForm = $('#quickForm');
