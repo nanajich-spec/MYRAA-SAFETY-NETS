@@ -106,6 +106,8 @@ class MyraaChatbot {
         this.createChatbotWidget();
         this.attachEventListeners();
         this.addChatbotToDOM();
+        this.updateViewportSizing();
+        this.attachViewportListeners();
     }
 
     getApiKey() {
@@ -236,6 +238,30 @@ class MyraaChatbot {
 
     addChatbotToDOM() {
         document.body.appendChild(this.chatbotWidget);
+    }
+
+    updateViewportSizing() {
+        if (!this.chatbotWidget) return;
+
+        const vp = window.visualViewport;
+        const vw = Math.max(0, Math.floor(vp ? vp.width : window.innerWidth));
+        const vh = Math.max(0, Math.floor(vp ? vp.height : window.innerHeight));
+
+        const dynWidth = Math.max(240, Math.min(340, Math.floor(vw * 0.82)));
+        const dynHeight = Math.max(190, Math.min(420, Math.floor(vh * 0.40)));
+
+        this.chatbotWidget.style.setProperty('--chatbot-dyn-width', `${dynWidth}px`);
+        this.chatbotWidget.style.setProperty('--chatbot-dyn-height', `${dynHeight}px`);
+    }
+
+    attachViewportListeners() {
+        const handleResize = () => this.updateViewportSizing();
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('orientationchange', handleResize);
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', handleResize);
+        }
     }
 
     toggleChat() {
