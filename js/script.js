@@ -482,6 +482,37 @@
     setInterval(() => show((idx + 1) % reviews.length), 4500);
   }
 
+  const heroDynamicImage = $('#heroDynamicImage');
+  const heroDynamicDots = $$('#heroDynamicDots span');
+  if (heroDynamicImage && heroDynamicDots.length) {
+    const heroImages = [
+      'images/safetynet.jpg',
+      'images/safetynet1.jpg',
+      'images/safetynet3.jpg',
+      'images/safetynet4.jpg',
+      'images/safetynet5.jpg',
+      'images/WhatsApp Image 2026-05-29 at 7.12.08 AM.jpeg'
+    ];
+
+    let heroImageIndex = 0;
+    const updateHeroImage = (index) => {
+      heroDynamicImage.src = heroImages[index];
+      heroDynamicDots.forEach((dot, dotIndex) => {
+        dot.classList.toggle('active', dotIndex === index);
+      });
+      heroImageIndex = index;
+    };
+
+    heroDynamicDots.forEach((dot, index) => {
+      dot.addEventListener('click', () => updateHeroImage(index));
+    });
+
+    setInterval(() => {
+      const nextIndex = (heroImageIndex + 1) % heroImages.length;
+      updateHeroImage(nextIndex);
+    }, 2800);
+  }
+
   const quickForm = $('#quickForm');
   if (quickForm) {
     quickForm.addEventListener('submit', async (e) => {

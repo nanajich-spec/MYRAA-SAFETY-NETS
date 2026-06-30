@@ -336,18 +336,39 @@
     <main id="mainContent">
     <section id="home" class="hero reveal">
         <div class="container hero-grid">
-            <div class="hero-copy hero-panel">
-                <span class="pill">MYRAA SAFETY NETS</span>
-                <h1>Best Bird Control Service</h1>
-                <p>Choose Myraa Safety Nets for top-quality bird and balcony safety solutions. We provide durable installations that keep your home clean, safe, and secure.</p>
-                <div class="hero-cta">
-                    <a href="tel:+919493948842" class="btn btn-primary">Contact Us</a>
+            <div class="hero-dynamic-gallery" aria-label="Myraa installation highlights">
+                <img id="heroDynamicImage" src="images/safetynet.jpg" alt="Myraa safety net work" loading="eager" decoding="async">
+                <a class="hero-call-overlay" href="tel:+919493948842" aria-label="Call Myraa Safety Nets">Call +91 9493948842</a>
+                <div class="hero-dots" id="heroDynamicDots" aria-hidden="true">
+                    <span class="active"></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
             </div>
 
-            <div class="hero-exp-tag" aria-hidden="true">
-                <strong>25</strong>
-                <span>Years Experiences In This Field</span>
+            <div class="hero-form-wrap hero-form-offset">
+                <h3>Quick Enquiry</h3>
+                <form id="quickForm" class="quick-form">
+                    <input type="text" id="qName" placeholder="Your Name *" autocomplete="name" required>
+                    <input type="tel" id="qPhone" placeholder="Mobile Number *" autocomplete="tel" inputmode="tel" required>
+                    <select id="qCity" required>
+                        <option value="">Select City *</option>
+                        <option>Hyderabad</option>
+                    </select>
+                    <select id="qService" required>
+                        <option value="">Select Service *</option>
+                        <option>Balcony Safety Nets</option>
+                        <option>Pigeon Safety Nets</option>
+                        <option>Invisible Grills</option>
+                        <option>Child Safety Nets</option>
+                        <option>Construction Safety Nets</option>
+                        <option>Sports Nets</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Submit Enquiry</button>
+                </form>
             </div>
         </div>
     </section>
