@@ -382,20 +382,24 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     padding-top: 18px;
     border-top: 1px solid #d9e5f0;
     display: grid;
-    grid-template-columns: 96px 1fr;
-    gap: 14px;
+    grid-template-columns: 150px 1fr;
+    gap: 16px;
     align-items: center;
 }
 .enquiry-extra img {
-    width: 96px;
-    height: 96px;
+    width: 150px;
+    height: 150px;
     border-radius: var(--radius-md);
     object-fit: cover;
     border: 1px solid #d9e5f0;
 }
 .enquiry-extra-info strong { display: block; color: var(--secondary); font-size: 16px; font-weight: 800; margin-bottom: 4px; }
-.enquiry-extra-info p { color: #44566b; font-size: 14px; line-height: 1.5; margin-bottom: 10px; }
-.enquiry-extra-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.enquiry-extra-info p { color: #44566b; font-size: 14px; line-height: 1.5; margin-bottom: 8px; }
+.enquiry-contact { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-weight: 700; }
+.enquiry-contact a { color: var(--secondary); }
+.enquiry-contact a:hover { color: var(--accent); }
+.enquiry-contact .icon-inline { color: var(--accent); flex-shrink: 0; }
+.enquiry-extra-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
 .enquiry-extra-actions .btn { padding: 8px 18px; font-size: 14px; }
 .welcome-copy h2 {
     font-size: clamp(26px, 3.4vw, 38px);
@@ -1131,6 +1135,8 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 [data-theme="dark"] .enquiry-extra img { border-color: #2b3f57; }
 [data-theme="dark"] .enquiry-extra-info strong { color: #f2f7ff; }
 [data-theme="dark"] .enquiry-extra-info p { color: #d8e5f6; }
+[data-theme="dark"] .enquiry-contact a { color: #f2f7ff; }
+[data-theme="dark"] .enquiry-contact a:hover { color: #ff8a57; }
 [data-theme="dark"] .hero-form-wrap h3,
 [data-theme="dark"] .svc h3,
 [data-theme="dark"] .contact-card h3,
