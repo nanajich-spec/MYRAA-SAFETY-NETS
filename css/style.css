@@ -127,6 +127,7 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 .site-header .container { overflow: visible; }
 .nav-wrap { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 30px; padding: 14px 20px; max-width: 1220px; margin: 0 auto; }
 .brand { display: inline-flex; align-items: center; gap: 12px; }
+.brand-logo { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 8px rgba(13, 23, 38, 0.18); background: #fff; }
 .brand span { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
 .brand strong { font-size: 24px; color: var(--secondary); font-weight: 800; letter-spacing: 0.5px; }
 .brand small { color: var(--accent); font-size: 12px; font-weight: 700; white-space: nowrap; }
@@ -361,11 +362,21 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 /* ===== Welcome + Enquiry ===== */
 .welcome-grid {
     display: grid;
-    grid-template-columns: 1.3fr 0.9fr;
-    gap: 40px;
-    align-items: start;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: stretch;
+    background: linear-gradient(160deg, #ffffff 0%, #f5f9ff 100%);
+    border: 1px solid #d5e1ee;
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-soft);
 }
-.welcome-copy .pill { margin-bottom: 14px; }
+.welcome-copy {
+    display: flex;
+    flex-direction: column;
+}
+.welcome-copy .pill { margin-bottom: 14px; align-self: flex-start; }
+.welcome-grid .hero-form-wrap { height: 100%; }
 .welcome-copy h2 {
     font-size: clamp(26px, 3.4vw, 38px);
     color: var(--secondary);
@@ -508,7 +519,7 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 .hero-copy li::before { content: "✓ "; color: var(--accent); font-weight: 900; margin-right: 10px; font-size: 18px; }
 .hero-cta { margin-top: 28px; display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 .hero-form-wrap { background: linear-gradient(160deg, #ffffff 0%, #f7fbff 45%, #eff6ff 100%); border: 1px solid #d5e1ee; border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-soft); }
-.hero-form-wrap h3 { color: var(--secondary); margin-bottom: 16px; font-size: 18px; font-weight: 700; }
+.hero-form-wrap h3 { color: var(--secondary); margin-bottom: 16px; font-size: clamp(26px, 3.4vw, 38px); font-weight: 800; line-height: 1.15; }
 .quick-form { display: grid; gap: 14px; }
 .hero-trust-grid {
     display: grid;
@@ -663,18 +674,19 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 .counter-grid p { color: #666; font-weight: 600; font-size: 15px; }
 
 .about { border-bottom: 1px solid #e0e0e0; padding: 80px 0; overflow: hidden; }
-.about .container { display: grid; grid-template-columns: minmax(280px, 420px) minmax(0, 1fr); gap: 40px; align-items: start; overflow: hidden; }
+.about .container { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: stretch; overflow: hidden; background: linear-gradient(160deg, #ffffff 0%, #f5f9ff 100%); border: 1px solid #d5e1ee; border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-soft); }
 .about-media {
     display: grid;
     gap: 16px;
-    align-content: start;
+    align-content: stretch;
     width: 100%;
     justify-items: center;
 }
 .about-media img {
-    width: min(100%, 400px);
-    height: clamp(220px, 24vw, 300px);
-    max-height: 300px;
+    width: 100%;
+    height: 100%;
+    min-height: clamp(240px, 28vw, 360px);
+    max-height: none;
     border-radius: var(--radius-md);
     border: 1px solid #dbe5ee;
     object-fit: cover;
@@ -682,6 +694,7 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     box-shadow: var(--shadow-soft);
 }
 .about-img { width: 100%; border-radius: 6px; border: 1px solid var(--border); }
+.about-copy { display: flex; flex-direction: column; }
 .about-copy h2 { margin-bottom: 16px; }
 .about-copy p { color: #445467; }
 .about-text h3 { font-size: 32px; margin-bottom: 20px; color: var(--secondary); font-weight: 800; }
@@ -1088,6 +1101,12 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     background: #162b42;
     border-color: #37506b;
 }
+[data-theme="dark"] .welcome-grid,
+[data-theme="dark"] .about .container {
+    background: #112237;
+    border-color: #2b3f57;
+    box-shadow: none;
+}
 [data-theme="dark"] .hero-form-wrap h3,
 [data-theme="dark"] .svc h3,
 [data-theme="dark"] .contact-card h3,
@@ -1205,6 +1224,7 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     .nav-wrap { grid-template-columns: auto 1fr auto; gap: 12px; padding: 12px 16px; overflow: visible; }
     .brand { min-width: 0; }
     .brand svg { width: 38px; height: 38px; flex-shrink: 0; }
+    .brand-logo { width: 38px; height: 38px; }
     .brand strong { font-size: 22px; }
     .brand small { display: none; }
     .desktop-nav { display: flex; }
@@ -1296,7 +1316,6 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     .hero-copy li { font-size: 14px; }
     .hero-cta { gap: 10px; }
     .hero-form-wrap { padding: 18px; }
-    .hero-form-wrap h3 { font-size: 16px; }
     .quick-form { gap: 10px; }
     .btn { padding: 11px 24px; font-size: 15px; }
     .counters { padding: 45px 0; }
@@ -1338,6 +1357,7 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     .brand { min-width: 0; overflow: visible; }
     .brand span { max-width: 170px; }
     .brand svg { width: 34px; height: 34px; flex-shrink: 0; }
+    .brand-logo { width: 34px; height: 34px; }
     .brand strong { font-size: 18px; letter-spacing: 0px; }
     .brand small { display: block; font-size: 9px; line-height: 1.15; white-space: normal; }
     .head-actions { gap: 6px; }
