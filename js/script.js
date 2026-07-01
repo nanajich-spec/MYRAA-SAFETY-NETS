@@ -490,6 +490,48 @@
     setInterval(() => show((idx + 1) % reviews.length), 4500);
   }
 
+  const reviewForm = $('#reviewForm');
+  const reviewFormNote = $('#reviewFormNote');
+  if (reviewForm) {
+    reviewForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const action = reviewForm.getAttribute('action') || '';
+      const setNote = (msg, ok) => {
+        if (!reviewFormNote) return;
+        reviewFormNote.textContent = msg;
+        reviewFormNote.classList.toggle('is-success', !!ok);
+        reviewFormNote.classList.toggle('is-error', !ok);
+      };
+
+      if (action.includes('YOUR_FORM_ID')) {
+        setNote('Review form is not configured yet. Please set up the Formspree form ID.', false);
+        return;
+      }
+
+      const submitBtn = reviewForm.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.disabled = true;
+      setNote('Submitting your review...', true);
+
+      try {
+        const res = await fetch(action, {
+          method: 'POST',
+          body: new FormData(reviewForm),
+          headers: { Accept: 'application/json' },
+        });
+        if (res.ok) {
+          reviewForm.reset();
+          setNote('Thank you! Your review was submitted and will appear after approval.', true);
+        } else {
+          setNote('Sorry, something went wrong. Please try again or WhatsApp us.', false);
+        }
+      } catch (err) {
+        setNote('Network error. Please check your connection and try again.', false);
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    });
+  }
+
   const heroBannerTrack = $('#heroBannerTrack');
   const heroBannerDotsWrap = $('#heroBannerDots');
   if (heroBannerTrack && heroBannerDotsWrap) {
