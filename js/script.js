@@ -545,7 +545,7 @@
     if (!telLink) return;
     if (typeof gtag === 'function') {
       gtag('event', 'conversion', {
-        'send_to': 'AW-7666219908/siVeCIT3xMccELzb_oxE',
+        'send_to': 'AW-18280852924/siVeCIT3xMccELzb_oxE',
         'value': 1.0,
         'currency': 'INR'
       });
