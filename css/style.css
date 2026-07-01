@@ -906,8 +906,6 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 .star-input input:checked ~ label,
 .star-input label:hover,
 .star-input label:hover ~ label { color: #f5b50a; }
-.review-file { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1.5px dashed #c9d6e3; border-radius: 10px; padding: 12px; font-size: 14px; color: #5b6b7d; font-weight: 600; }
-.review-file input[type="file"] { font-size: 13px; max-width: 60%; }
 .review-form .btn { justify-self: start; }
 .review-form-note { font-size: 14px; font-weight: 700; margin: 0; min-height: 18px; }
 .review-form-note.is-success { color: #1a9c53; }
@@ -1434,8 +1432,6 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
     .enquiry-extra-actions { margin-top: 4px; }
     .review-form-wrap { padding: 20px; }
     .review-form-row { grid-template-columns: 1fr; }
-    .review-file { flex-direction: column; align-items: flex-start; }
-    .review-file input[type="file"] { max-width: 100%; }
     .hero { padding: 50px 16px; }
     .hero-banner { height: clamp(360px, 56vh, 460px); }
     .hero-banner-caption h1 { font-size: clamp(28px, 8vw, 40px); }
