@@ -518,11 +518,18 @@
           body: new FormData(reviewForm),
           headers: { Accept: 'application/json' },
         });
+        let data = null;
+        try { data = await res.json(); } catch (_) { /* ignore */ }
         if (res.ok) {
           reviewForm.reset();
           setNote('Thank you! Your review was submitted and will appear after approval.', true);
         } else {
-          setNote('Sorry, something went wrong. Please try again or WhatsApp us.', false);
+          const reason = data && Array.isArray(data.errors) && data.errors.length
+            ? data.errors.map((er) => er.message).join(' ')
+            : (data && data.error) ? data.error : '';
+          setNote(reason
+            ? ('Could not submit: ' + reason)
+            : 'Sorry, something went wrong. Please try again or WhatsApp us.', false);
         }
       } catch (err) {
         setNote('Network error. Please check your connection and try again.', false);
