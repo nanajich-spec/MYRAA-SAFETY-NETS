@@ -539,6 +539,19 @@
     });
   }
 
+  // Google Ads: Mobile click-to-call conversion tracking on all tel: links
+  document.addEventListener('click', (event) => {
+    const telLink = event.target.closest && event.target.closest('a[href^="tel:"]');
+    if (!telLink) return;
+    if (typeof gtag === 'function') {
+      gtag('event', 'conversion', {
+        'send_to': 'AW-18280852924/siVeCIT3xMccELzb_oxE',
+        'value': 1.0,
+        'currency': 'INR'
+      });
+    }
+  });
+
   const heroBannerTrack = $('#heroBannerTrack');
   const heroBannerDotsWrap = $('#heroBannerDots');
   if (heroBannerTrack && heroBannerDotsWrap) {
