@@ -129,6 +129,16 @@ p, li, a, button, input, select, textarea { font-family: "DM Sans", "Segoe UI", 
 .strip-inner .icon-inline { width: 17px; height: 17px; }
 .strip-inner .icon-wa { fill: #fff; stroke: none; }
 
+.verification-phone {
+    text-align: center;
+    font-weight: 700;
+    color: #1d2e44;
+    background: #fff2e9;
+    border-bottom: 1px solid #ffd9c8;
+    padding: 10px 16px;
+    letter-spacing: 0.01em;
+}
+
 .site-header { position: sticky; top: 0; z-index: 1000; background: var(--surface-header); border-bottom: 1px solid #e0e6ef; box-shadow: 0 10px 24px rgba(11, 33, 64, 0.08); backdrop-filter: blur(8px); }
 .site-header .container { overflow: visible; }
 .nav-wrap { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 30px; padding: 14px 20px; max-width: 1220px; margin: 0 auto; }
