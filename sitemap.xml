@@ -7,14 +7,8 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.myraasafetynets.com/logo-design.html</loc>
-    <lastmod>2026-06-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://www.myraasafetynets.com/hyderabad</loc>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -50,14 +44,15 @@
   </url>
   <url>
     <loc>https://www.myraasafetynets.com/gachibowli-safety-nets.html</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.myraasafetynets.com/kondapur-safety-nets.html</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
 </urlset>
